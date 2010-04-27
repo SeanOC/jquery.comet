@@ -34,11 +34,12 @@ jQuery.comet = {
                 error: function(XMLHttpRequest, textStatus, errorThrown) {
                     jQuery.comet.fetching = false;
                     if (textStatus == 'timeout') {
-                        jQuery.comet.fetch();
+                        jQuery.comet.fetch()
                     } else {
                         if (jQuery.comet.settings.onError != null) {
                             jQuery.comet.settings.onError(XMLHttpRequest, textStatus, errorThrown);
                         }
+                        setTimeout(jQuery.comet.fetch, 10000);
                     }
                     
                 },
