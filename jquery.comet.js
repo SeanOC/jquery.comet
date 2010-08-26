@@ -17,36 +17,37 @@ jQuery.comet = {
     },
 
     fetch: function() {
-        if (!jQuery.comet.fetching) {
-            jQuery.comet.fetching = true;
-            $.ajax({
-                type: jQuery.comet.settings.requestMethod,
-                url: jQuery.comet.url,
-            
-                async: true,
-                cache: true,
-                timeout: jQuery.comet.settings.timeout,
-                ifModified: true,
-            
-                success: function(data) {
-                    jQuery.comet.fetching = false;
-                    jQuery.comet.handle_update(data);
-                    jQuery.comet.fetch();
-                },
-                error: function(XMLHttpRequest, textStatus, errorThrown) {
-                    jQuery.comet.fetching = false;
-                    if (textStatus == 'timeout') {
-                        jQuery.comet.fetch()
-                    } else {
-                        if (jQuery.comet.settings.onError != null) {
-                            jQuery.comet.settings.onError(XMLHttpRequest, textStatus, errorThrown);
-                        }
-                        setTimeout(jQuery.comet.fetch, 10000);
+        if (jQuery.comet.fetching)
+            return;
+
+        jQuery.comet.fetching = true;
+        $.ajax({
+            type: jQuery.comet.settings.requestMethod,
+            url: jQuery.comet.url,
+        
+            async: true,
+            cache: true,
+            timeout: jQuery.comet.settings.timeout,
+            ifModified: true,
+        
+            success: function(data) {
+                jQuery.comet.fetching = false;
+                jQuery.comet.handle_update(data);
+                jQuery.comet.fetch();
+            },
+            error: function(XMLHttpRequest, textStatus, errorThrown) {
+                jQuery.comet.fetching = false;
+                if (textStatus == 'timeout') {
+                    jQuery.comet.fetch()
+                } else {
+                    if (jQuery.comet.settings.onError != null) {
+                        jQuery.comet.settings.onError(XMLHttpRequest, textStatus, errorThrown);
                     }
-                    
+                    setTimeout(jQuery.comet.fetch, 10000);
                 }
-            });
-        }
+                
+            }
+        });
     },
 
     handle_update: function(update) {
