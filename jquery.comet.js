@@ -33,7 +33,7 @@ jQuery.comet = {
             success: function(data) {
                 jQuery.comet.fetching = false;
                 jQuery.comet.handle_update(data);
-                jQuery.comet.fetch();
+                setTimeout(jQuery.comet.fetch, 1);
             },
             error: function(XMLHttpRequest, textStatus, errorThrown) {
                 jQuery.comet.fetching = false;
