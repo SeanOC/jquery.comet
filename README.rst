@@ -32,14 +32,10 @@ dataAttr
 Binding to events
 -----------------
 
-The plugin will generates for each blob of data pushed out by the comet server.  To do anything with these events, you will need to bind functions to receive and handle them.  jQuery.comet provides a ``bind`` method which allows you to setup a function to either receive all events or events of a given type.   Bound events will be passed a data and a type parameter.  Event types are determined by the ``type`` attribute in the data pushed by the server (this attribute can be changed with the ``typeAttr`` option).  Similarly data will be the value of the ``data`` attribute in the pushed data (configurable via ``dataAttr``).  If a ``data`` attribute is unavailable or ``dataAttr`` has been set to ``null``, the whole data push will be passed in.
+The plugin will trigger custom events in the ``.comet`` namespace for each blob of data pushed out by the comet server.  Use the regular jQuery bind/unbind methods to attach your event handlers, and bind to ``.comet`` to catch all events (see examples below).
 
-Unbinding functions
--------------------
+Event handlers will be passed the parameters ``data`` and ``type``: the value of the ``data`` attribute in the pushed data (configurable via ``dataAttr``) and the ``type`` attribute in the pushed data (configurable via ``typeAttr``). If a ``data`` attribute is unavailable or ``dataAttr`` has been set to ``null``, the whole data push will be passed in.
 
-To stop receiving events with a particular function, call ``jquery.comet.unbind`` with the same parameters as ``bind`` was called with.
-  
-  
 Example
 ~~~~~~~
 
@@ -48,21 +44,21 @@ Below is some example use of the plugin::
   <script src="site/js/jquery.js" type="text/javascript"></script>
   <script src="site/js/jquery.comet.js" type="text/javascript"></script>
   <script type="text/javascript">
-      function updateFeed(data) {
+      function updateFeed(event, data) {
           $('ul#feed').append("<li>" + data.message + "</li>");
       }
       
-      function catchAll(data, type) {
+      function catchAll(event, data, type) {
           console.log(data);
           console.log(type);
       }
   
       $.comet.connect('/activity?channel=tweets');
-      $.comet.bind(updateFeed, 'feed');
-      $.comet.bind(catchAll);
+      $(document).bind('feed.comet', updateFeed);
+      $(document).bind('.comet', catchAll);
       
       $('#kill-button').click(function() {
-          $.comet.unbind(updateFeed, 'feed');
+          $(document).unbind('comet.feed', updateFeed);
       });
   </script>
   

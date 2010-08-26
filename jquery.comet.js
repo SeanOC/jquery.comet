@@ -1,4 +1,5 @@
 jQuery.comet = {
+
     fetching: false,
     settings: {},
     url: '',
@@ -14,6 +15,7 @@ jQuery.comet = {
         jQuery.comet.url = url;
         jQuery.comet.fetch();
     },
+
     fetch: function() {
         if (!jQuery.comet.fetching) {
             jQuery.comet.fetching = true;
@@ -46,6 +48,7 @@ jQuery.comet = {
             });
         }
     },
+
     handle_update: function(update) {
         type = null;
         data = update;
@@ -57,41 +60,7 @@ jQuery.comet = {
             data = update[jQuery.comet.settings.dataAttr];
         }
         
-        jQuery.comet.trigger(type, data);
+        jQuery(document).trigger(type + ".comet", [data, type]);
     },
-    bind: function(func, type) {
-        if (!type) {
-            type = '__all__';
-        }
-        if (jQuery.isArray(jQuery.comet.bound[type])) {
-            if (!jQuery.inArray(func, jQuery.comet.bound)) {
-                jQuery.comet.bound[type].push(func);
-            }
-        } else {
-            jQuery.comet.bound[type] = [func];
-        }
-    },
-    unbind: function(func, type) {
-        if (!type) {
-            type = '__all__';
-        }
-        if (jQuery.isArray(jQuery.comet.bound[type])) {
-            index = jQuery.inArray(func, jQuery.comet.bound[type]);
-            if (index != -1) {
-                jQuery.comet.bound[type].splice(index, 1);
-            }
-        }
-    },
-    trigger: function(type, data) {
-        call = function (index, func) {
-            func(data, type);
-        }
-        bound = jQuery.comet.bound;
-        if (bound['__all__']) {
-            jQuery.each(bound.__all__, call);
-        }
-        if (jQuery.isArray(bound[type])) {
-            jQuery.each(bound[type], call);
-        }
-    }
+
 };
