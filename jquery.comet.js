@@ -9,7 +9,7 @@ jQuery.comet = {
             onError: null,
             requestMethod: 'GET',
             typeAttr: 'type',
-            dataAttr: 'data',
+            dataAttr: 'data'
         }, options);
         jQuery.comet.url = url;
         jQuery.comet.fetch();
@@ -42,7 +42,7 @@ jQuery.comet = {
                         setTimeout(jQuery.comet.fetch, 10000);
                     }
                     
-                },
+                }
             });
         }
     },
